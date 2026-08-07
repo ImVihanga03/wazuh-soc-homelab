@@ -74,7 +74,7 @@ hydra -l Admin -P pass.txt rdp://172.20.10.3 -s 3389 -u -t 4
 | `-t 4` | 4 concurrent login attempt threads |
 
 > **Figure 1 — RDP Brute-Force Execution (Kali Terminal)**
-> `03-hydra-attack.png`
+> `screenshots\03-hydra-attack.png`
 > Shows Hydra initiating the attack against `172.20.10.3:3389`, confirming 4 tasks per server and 6 login attempts (1 login × 6 passwords) scheduled against the `Admin` account.
 
 ---
@@ -93,7 +93,7 @@ hydra -l Admin -P pass.txt rdp://172.20.10.3 -s 3389 -u -t 4
 | Detection Volume | 7 correlated hits within the observed window |
 
 > **Figure 2 — Alert Spike on Wazuh Dashboard**
-> `04-brute-force-detection.png`
+> `screenshots\04-brute-force-detection.png`
 > The Events view (agent `DESKTOP-URKFPLC`) shows a sharp spike of 7 hits clustered at `15:09:33–15:09:35`, each tagged `rule.id: 60122`, `rule.level: 5`, `rule.description: Logon Failure - Unknown...` — directly correlating in time with the Hydra execution window shown in Figure 1.
 
 ### 4.2 Forensic IOC Breakdown (Raw JSON Document Details)
@@ -117,7 +117,7 @@ Drilling into an individual alert's **Document Details → Table** view exposes 
 | Targeted Account | `Admin` | Matches the `-l Admin` value passed to Hydra |
 
 > **Figure 3 — Expanded JSON Document Details**
-> `05-brute-force-detection-2.png`
+> `screenshots\05-brute-force-detection-2.png`
 > Full field-level breakdown of the NTLM authentication failure, isolating the attacker's source IP (`172.20.10.6`), the `NtLmSsp` logon process, and the dual status/sub-status codes (`0xc000006d` / `0xc000006a`) that together confirm a wrong-password rejection rather than an account-state issue.
 
 ### 4.3 Incident Timeline
